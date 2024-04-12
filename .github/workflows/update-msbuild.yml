@@ -19,25 +19,7 @@ jobs:
           git add .gitattributes
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
-
-          FILE=./otherlibraries-main.zip
-          # if [[ -f $FILE ]]; then
-          #   echo "$FILE exists! => Need removed!!!"
-          #   rm -f $FILE
-          #   # git add .
-          #   # git commit -m "Remove old otherlibraries-main.zip"
-          # fi
-          # if [[ -f $FILE ]]; then
-          #   echo "Check: $FILE exists!"
-          # else
-          #   echo "Check: $FILE does not exist!"
-          # fi
-          curl -o $FILE -L https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
-          if [[ -f $FILE ]]; then
-            echo "Check on curl: $FILE exists!"
-          else
-            echo "Check on curl: $FILE does not exist!"
-          fi
+          curl -o ./otherlibraries-main.zip -L https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
           git add .
           git commit -m "Add otherlibraries-main.zip; commit: ${{ github.sha }}; author: ${{ github.actor }}"
           git push
