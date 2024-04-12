@@ -14,4 +14,4 @@ jobs:
         if: ${{ always() }}
         shell: pwsh
         run: |
-          ls -R
+          ls -R ./
