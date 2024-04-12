@@ -13,7 +13,7 @@ jobs:
       - name: Download otherlibraries-main.zip
         working-directory: ./.clonemsbuild
         run: |
-          FILE=./.clonemsbuild/otherlibraries-main.zip
+          FILE=./otherlibraries-main.zip
           if [[ -f $FILE ]]; then
             echo "$FILE exists! => Need removed"
             rm -f $FILE
@@ -26,14 +26,10 @@ jobs:
             echo "Check: $FILE does not exist!"
           fi
           curl -o $FILE https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
-      - name: Display files
-        if: ${{ always() }}
-        run: |
-          FILE=./.clonemsbuild/otherlibraries-main.zip
           if [[ -f $FILE ]]; then
-            echo "$FILE exists!"
+            echo "Check on curl: $FILE exists!"
           else
-            echo "$FILE does not exist!"
+            echo "Check on curl: $FILE does not exist!"
           fi
       - name: Push code
         working-directory: ./.clonemsbuild
