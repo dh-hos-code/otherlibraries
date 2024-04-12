@@ -9,6 +9,7 @@ jobs:
       - name: Clone msbuild
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
+          chmod u=rwx ./.clonemsbuild
       - name: Clone msbuild
         working-directory: ./.clonemsbuild
         run: |
@@ -22,4 +23,9 @@ jobs:
       - name: Display files
         if: ${{ always() }}
         run: |
-          echo $(-f "./.clonemsbuild/otherlibraries-main.zip")
+          FILE=./.clonemsbuild/otherlibraries-main.zip
+          if [[ -f $FILE ]]; then
+            echo "$FILE exists!"
+          else
+            echo "$FILE does not exist!"
+          fi
