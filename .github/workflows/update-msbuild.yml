@@ -14,6 +14,7 @@ jobs:
           token: ${{ secrets.CALLMSBUILD }} # `GH_PAT` is a secret that contains your PAT
           # path: my-tools
       - run: |
+          git lfs install
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
           FILE=./otherlibraries-main.zip
