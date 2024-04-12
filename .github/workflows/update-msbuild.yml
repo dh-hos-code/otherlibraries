@@ -13,9 +13,11 @@ jobs:
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
           git config --unset-all http.https://github.com/.extraheader
-          git add ./.clonemsbuild/otherlibraries-main.zip
+          cd ./.clonemsbuild
+          git add ./otherlibraries-main.zip
           git commit -m "Add otherlibraries-main.zip"
-          git -c http.extraHeader="${{ secrets.MSBUILDTOKEN }}" push -u https://github.com/dh-hos-code/msbuild.git main
+          git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
       - name: Display files
+        if: ${{ always() }}
         run: |
           echo ($-f "./.clonemsbuild/otherlibraries-main.zip")
