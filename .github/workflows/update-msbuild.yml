@@ -25,7 +25,7 @@ jobs:
       - name: Download otherlibraries-main.zip
         working-directory: ./.clonemsbuild
         run: |
-          curl -o ./otherlibraries-main.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
+          curl -o ./otherlibraries-main-${{ github.sha }}.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
       - name: Display files
         if: ${{ always() }}
         run: |
