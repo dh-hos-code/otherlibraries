@@ -12,5 +12,4 @@ jobs:
           curl -o ./.clonemsbuild/otherlibraries-main.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
       - name: Display files
         run: |
-          list=$(ls -R ./)
-          echo $list
+          echo "[LS]: $(ls -al)"
