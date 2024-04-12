@@ -40,6 +40,6 @@ jobs:
         run: |
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
-          git add ./otherlibraries-main.zip
+          git add .
           git commit -m "Add otherlibraries-main.zip; commit: ${{ github.sha }}; author: ${{ github.actor }}"
           git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
