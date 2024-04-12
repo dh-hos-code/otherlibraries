@@ -10,6 +10,11 @@ jobs:
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
           chmod u=rwx ./.clonemsbuild
+          FILE=./.clonemsbuild/otherlibraries-main.zip
+          if [[ -f $FILE ]]; then
+            echo "$FILE exists! => Need removed"
+            rm -f $FILE
+          else
       - name: Download otherlibraries-main.zip
         working-directory: ./.clonemsbuild
         run: |
