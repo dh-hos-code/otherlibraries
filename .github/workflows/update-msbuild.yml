@@ -1,0 +1,11 @@
+name: update-msbuild
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  updatemsbuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone msbuild
+        run: |
+          git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
