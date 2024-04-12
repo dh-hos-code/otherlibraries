@@ -1,7 +1,7 @@
 name: update-msbuild
 on:
   workflow_dispatch:
-  # push:
+  push:
 jobs:
   updatemsbuild:
     runs-on: ubuntu-latest
@@ -9,23 +9,23 @@ jobs:
       - name: Clone msbuild
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
-      - name: Remove otherlibraries-main.zip
-        run: |
           chmod u=rwx ./.clonemsbuild
+      - name: Download otherlibraries-main.zip
+        working-directory: ./.clonemsbuild
+        run: |
           FILE=./.clonemsbuild/otherlibraries-main.zip
           if [[ -f $FILE ]]; then
             echo "$FILE exists! => Need removed"
             rm -f $FILE
+            git add .
+            git commit -m "Remove old otherlibraries-main.zip"
           fi
           if [[ -f $FILE ]]; then
             echo "Check: $FILE exists!"
           else
             echo "Check: $FILE does not exist!"
           fi
-      - name: Download otherlibraries-main.zip
-        working-directory: ./.clonemsbuild
-        run: |
-          curl -o ./otherlibraries-main-${{ github.sha }}.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
+          curl -o $FILE https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
       - name: Display files
         if: ${{ always() }}
         run: |
