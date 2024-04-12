@@ -1,7 +1,7 @@
 name: update-msbuild
 on:
   workflow_dispatch:
-  push:
+  # push:
 jobs:
   updatemsbuild:
     runs-on: ubuntu-latest
