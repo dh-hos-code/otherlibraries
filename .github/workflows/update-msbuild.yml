@@ -7,6 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone msbuild
+      - uses: actions/checkout@v4
+        with:
+          lfs: "true"
+          sparse-checkout: |
+            Readme.md
+          sparse-checkout-cone-mode: false
+      - name: Clone msbuild
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
           chmod u=rwx ./.clonemsbuild
