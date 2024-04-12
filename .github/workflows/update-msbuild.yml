@@ -6,19 +6,13 @@ jobs:
   updatemsbuild:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone msbuild
+      - name: Checkout dh-hos-code/msbuild
         uses: actions/checkout@v4
         with:
-          lfs: "true"
-          sparse-checkout: |
-            Readme.md
-          sparse-checkout-cone-mode: false
-      - name: Clone msbuild
-        run: |
-          git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
-          chmod u=rwx ./.clonemsbuild
-      - name: Download otherlibraries-main.zip
-        working-directory: ./.clonemsbuild
+          lfs: true
+          repository: dh-hos-code/msbuild
+          token: ${{ secrets.CALLMSBUILD }} # `GH_PAT` is a secret that contains your PAT
+          # path: my-tools
         run: |
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
@@ -35,10 +29,6 @@ jobs:
             echo "Check: $FILE does not exist!"
           fi
           curl -o $FILE -L https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
-      - name: Push code
-        working-directory: ./.clonemsbuild
-        run: |
-          FILE=./otherlibraries-main.zip
           if [[ -f $FILE ]]; then
             echo "Check on curl: $FILE exists!"
           else
@@ -46,4 +36,47 @@ jobs:
           fi
           git add .
           git commit -m "Add otherlibraries-main.zip; commit: ${{ github.sha }}; author: ${{ github.actor }}"
-          git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
+          git push
+          # git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
+
+      # - name: Clone msbuild
+      #   uses: actions/checkout@v4
+      #   with:
+      #     lfs: "true"
+      #     sparse-checkout: |
+      #       Readme.md
+      #     sparse-checkout-cone-mode: false
+      # - name: Clone msbuild
+      #   run: |
+      #     git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
+      #     chmod u=rwx ./.clonemsbuild
+      # - name: Download otherlibraries-main.zip
+      #   working-directory: ./.clonemsbuild
+      #   run: |
+      #     git config --global user.name "ongtrieuhau-dh"
+      #     git config --global user.email "o.ngtrieuhau861@gmail.com"
+      #     FILE=./otherlibraries-main.zip
+      #     if [[ -f $FILE ]]; then
+      #       echo "$FILE exists! => Need removed!!!"
+      #       rm -f $FILE
+      #       git add .
+      #       git commit -m "Remove old otherlibraries-main.zip"
+      #     fi
+      #     if [[ -f $FILE ]]; then
+      #       echo "Check: $FILE exists!"
+      #     else
+      #       echo "Check: $FILE does not exist!"
+      #     fi
+      #     curl -o $FILE -L https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
+      # - name: Push code
+      #   working-directory: ./.clonemsbuild
+      #   run: |
+      #     FILE=./otherlibraries-main.zip
+      #     if [[ -f $FILE ]]; then
+      #       echo "Check on curl: $FILE exists!"
+      #     else
+      #       echo "Check on curl: $FILE does not exist!"
+      #     fi
+      #     git add .
+      #     git commit -m "Add otherlibraries-main.zip; commit: ${{ github.sha }}; author: ${{ github.actor }}"
+      #     git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
