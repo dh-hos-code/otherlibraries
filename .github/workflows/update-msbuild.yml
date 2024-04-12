@@ -10,7 +10,4 @@ jobs:
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
           curl -o ./.clonemsbuild/otherlibraries-main.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
-      - name: Display files
-        if: ${{ always() }}
-        run: |
-          ls ./ -R
+      - run: ls
