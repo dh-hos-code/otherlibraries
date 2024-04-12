@@ -27,7 +27,7 @@ jobs:
           else
             echo "Check: $FILE does not exist!"
           fi
-          curl -o $FILE https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
+          curl -o $FILE -L https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
       - name: Push code
         working-directory: ./.clonemsbuild
         run: |
