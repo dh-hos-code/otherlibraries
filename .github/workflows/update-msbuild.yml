@@ -15,7 +15,7 @@ jobs:
         run: |
           FILE=./otherlibraries-main.zip
           if [[ -f $FILE ]]; then
-            echo "$FILE exists! => Need removed"
+            echo "$FILE exists! => Need removed!!!"
             rm -f $FILE
             git add .
             git commit -m "Remove old otherlibraries-main.zip"
