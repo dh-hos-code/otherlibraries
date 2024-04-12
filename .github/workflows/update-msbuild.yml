@@ -28,7 +28,7 @@ jobs:
         run: |
           git config --global user.name "ongtrieuhau-dh"
           git config --global user.email "o.ngtrieuhau861@gmail.com"
-          git config --unset-all http.https://github.com/.extraheader
+          # git config --unset-all http.https://github.com/.extraheader
           git add ./otherlibraries-main.zip
           git commit -m "Add otherlibraries-main.zip"
           git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
