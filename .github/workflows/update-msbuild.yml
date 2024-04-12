@@ -13,6 +13,8 @@ jobs:
       - name: Download otherlibraries-main.zip
         working-directory: ./.clonemsbuild
         run: |
+          git config --global user.name "ongtrieuhau-dh"
+          git config --global user.email "o.ngtrieuhau861@gmail.com"
           FILE=./otherlibraries-main.zip
           if [[ -f $FILE ]]; then
             echo "$FILE exists! => Need removed!!!"
@@ -34,8 +36,6 @@ jobs:
       - name: Push code
         working-directory: ./.clonemsbuild
         run: |
-          git config --global user.name "ongtrieuhau-dh"
-          git config --global user.email "o.ngtrieuhau861@gmail.com"
           git add .
           git commit -m "Add otherlibraries-main.zip; commit: ${{ github.sha }}; author: ${{ github.actor }}"
           git -c http.extraHeader="${{ secrets.MSBUILDTOKENEXTRAHEADER }}" push -u https://github.com/dh-hos-code/msbuild.git main
