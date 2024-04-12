@@ -17,6 +17,11 @@ jobs:
             echo "$FILE exists! => Need removed"
             rm -f $FILE
           fi
+          if [[ -f $FILE ]]; then
+            echo "Check: $FILE exists!"
+          else
+            echo "Check: $FILE does not exist!"
+          fi
       - name: Download otherlibraries-main.zip
         working-directory: ./.clonemsbuild
         run: |
