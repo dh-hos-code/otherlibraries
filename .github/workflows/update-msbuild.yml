@@ -10,4 +10,7 @@ jobs:
         run: |
           git clone https://github.com/dh-hos-code/msbuild.git ./.clonemsbuild
           curl -o ./.clonemsbuild/otherlibraries-main.zip https://github.com/dh-hos-code/otherlibraries/archive/refs/heads/main.zip
-      - run: ls
+     - name: Display files
+        run: |
+          list=$(ls -R ./)
+          echo $list
