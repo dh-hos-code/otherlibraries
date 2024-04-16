@@ -11,7 +11,7 @@
 
 #### :eight_spoked_asterisk: Chức năng
 
-- Toàn bộ các libray (dll) bên ngoài (không phải DH phát triển) được sử dụng trong DHG.Hospital.
+- Toàn bộ các library (dll) bên ngoài (không phải DH phát triển) được sử dụng trong DHG.Hospital.
 - [Xem dạng Files](https://github.com/dh-hos-code/otherlibraries/blob/main/Readme.md)
 
 #### :eight_spoked_asterisk: Nhật ký thay đổi
