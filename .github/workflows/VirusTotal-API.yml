@@ -1,6 +1,6 @@
 name: Virus Scan
 
-on: [push, pull_request, workflow_dispatch]
+on: [push, pull_request]
 
 jobs:
   scan:
@@ -11,12 +11,25 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Scan with VirusTotal
+        id: virustotal
         run: |
           apt-get update && apt-get install -y jq curl
+          touch virustotal_results.txt
           for file in $(find . -type f -name '*'); do
             response=$(curl --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
             id=$(echo $response | jq -r .data.id)
             echo "Scanning file $file with ID $id"
             report=$(curl --request GET --url https://www.virustotal.com/api/v3/analyses/$id --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
-            echo "Report for $file: $report"
+            positives=$(echo $report | jq -r .data.attributes.stats.malicious)
+            echo "File: $file - Malicious: $positives" >> virustotal_results.txt
+            if [ $positives -gt 0 ]; then
+              echo "Threats detected in file $file!" && exit 1
+            fi
           done
+          cat virustotal_results.txt
+      - name: Upload VirusTotal results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: virustotal-results
+          path: virustotal_results.txt
