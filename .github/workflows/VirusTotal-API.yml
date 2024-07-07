@@ -16,7 +16,7 @@ jobs:
           apt-get update && apt-get install -y jq curl
           touch virustotal_results.txt
           touch virustotal_errors.txt
-          for file in $(find . -type f -name '*'); do
+          find . -type f -name '*' | while read -r file; do
             echo "Processing file: $file"
             response=$(curl --silent --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
             if [ $? -ne 0 ]; then
