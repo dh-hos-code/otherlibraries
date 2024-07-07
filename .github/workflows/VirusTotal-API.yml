@@ -16,13 +16,19 @@ jobs:
           apt-get update && apt-get install -y jq curl
           touch virustotal_results.txt
           for file in $(find . -type f -name '*'); do
-            response=$(curl --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
-            id=$(echo $response | jq -r .data.id)
+            response=$(curl --silent --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
+            echo "Response for file $file: $response"
+            id=$(echo $response | jq -r '.data.id // empty')
+            if [ -z "$id" ]; then
+              echo "Failed to retrieve scan ID for file $file"
+              continue
+            fi
             echo "Scanning file $file with ID $id"
-            report=$(curl --request GET --url https://www.virustotal.com/api/v3/analyses/$id --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
-            positives=$(echo $report | jq -r .data.attributes.stats.malicious)
+            report=$(curl --silent --request GET --url https://www.virustotal.com/api/v3/analyses/$id --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
+            echo "Report for file $file: $report"
+            positives=$(echo $report | jq -r '.data.attributes.stats.malicious // 0')
             echo "File: $file - Malicious: $positives" >> virustotal_results.txt
-            if [ $positives -gt 0 ]; then
+            if [ "$positives" -gt 0 ]; then
               echo "Threats detected in file $file!" && exit 1
             fi
           done
