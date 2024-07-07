@@ -1,0 +1,22 @@
+name: Virus Scan
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Scan with VirusTotal
+        run: |
+          apt-get update && apt-get install -y jq curl
+          for file in $(find . -type f -name '*'); do
+            response=$(curl --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
+            id=$(echo $response | jq -r .data.id)
+            echo "Scanning file $file with ID $id"
+            report=$(curl --request GET --url https://www.virustotal.com/api/v3/analyses/$id --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
+            echo "Report for $file: $report"
+          done
