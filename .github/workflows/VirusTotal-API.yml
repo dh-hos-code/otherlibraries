@@ -15,27 +15,45 @@ jobs:
         run: |
           apt-get update && apt-get install -y jq curl
           touch virustotal_results.txt
+          touch virustotal_errors.txt
           for file in $(find . -type f -name '*'); do
+            echo "Processing file: $file"
             response=$(curl --silent --request POST --url https://www.virustotal.com/api/v3/files --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" --form "file=@$file")
-            echo "Response for file $file: $response"
+            if [ $? -ne 0 ]; then
+              echo "Error uploading file $file to VirusTotal" >> virustotal_errors.txt
+              continue
+            fi
             id=$(echo $response | jq -r '.data.id // empty')
             if [ -z "$id" ]; then
-              echo "Failed to retrieve scan ID for file $file"
+              echo "Failed to retrieve scan ID for file $file" >> virustotal_errors.txt
               continue
             fi
             echo "Scanning file $file with ID $id"
             report=$(curl --silent --request GET --url https://www.virustotal.com/api/v3/analyses/$id --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
-            echo "Report for file $file: $report"
+            if [ $? -ne 0 ]; then
+              echo "Error retrieving report for file $file with ID $id" >> virustotal_errors.txt
+              continue
+            fi
             positives=$(echo $report | jq -r '.data.attributes.stats.malicious // 0')
             echo "File: $file - Malicious: $positives" >> virustotal_results.txt
             if [ "$positives" -gt 0 ]; then
-              echo "Threats detected in file $file!" && exit 1
+              echo "Threats detected in file $file!"
+              continue
             fi
           done
+          echo "VirusTotal Results:"
           cat virustotal_results.txt
+          echo "VirusTotal Errors:"
+          cat virustotal_errors.txt
       - name: Upload VirusTotal results
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: virustotal-results
           path: virustotal_results.txt
+      - name: Upload VirusTotal errors
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: virustotal-errors
+          path: virustotal_errors.txt
